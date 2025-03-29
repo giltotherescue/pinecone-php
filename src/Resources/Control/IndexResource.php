@@ -92,4 +92,26 @@ class IndexResource extends Resource
             name: $this->name
         ));
     }
+
+    /**
+     * Create an index with integrated embedding for automatic text-to-vector conversion.
+     * 
+     * @param array $embed Configuration for the embedding model, including model name and field mapping
+     * @param string|null $cloud Cloud provider (aws, gcp, azure)
+     * @param string|null $region Cloud region
+     * @return Response
+     */
+    public function createForModel(
+        array       $embed,
+        ?string     $cloud = null,
+        ?string     $region = null
+    ): Response
+    {
+        return $this->connector->send(new Control\CreateForModel(
+            name: $this->name,
+            embed: $embed,
+            cloud: $cloud ?? 'aws',
+            region: $region ?? 'us-east-1'
+        ));
+    }
 }

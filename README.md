@@ -130,6 +130,24 @@ if($response->successful()) {
 }
 ```
 
+### Create Index with Integrated Embedding
+
+[Pinecone Docs](https://docs.pinecone.io/reference/api/2025-01/control-plane/create_for_model)
+
+```php
+$response = $pinecone->control()->index('my-index')->createForModel(
+    cloud: 'aws',
+    region: 'us-east-1',
+    embed: [
+        'model' => 'multilingual-e5-large'
+    ]
+);
+
+if($response->successful()) {
+    // 
+}
+```
+
 ### Describe Index
 
 [Pinecone Docs](https://docs.pinecone.io/reference/describe_index)
@@ -293,6 +311,24 @@ if($response->successful()) {
 }
 ```
 
+### Upsert Records
+
+[Pinecone Docs](https://docs.pinecone.io/reference/api/2025-01/data-plane/upsert_records)
+
+```php
+$response = $pinecone->data()->vectors()->upsertRecords(records: [
+    [
+        '_id' => 'record_1',
+        'text' => 'This is text that will be converted to a vector by Pinecone',
+        'category' => 'example-metadata',
+    ]
+], namespace: 'my-namespace');
+
+if($response->successful()) {
+    // 
+}
+```
+
 ### Query Vectors
 
 [Pinecone Docs](https://docs.pinecone.io/reference/query)
@@ -300,11 +336,36 @@ if($response->successful()) {
 ```php
 $response = $pinecone->data()->vectors()->query(
     vector: array_fill(0, 128, 0.12),
-    topK: 1,
+    namespace: 'my-namespace',
+    filter: ['genre' => 'documentary'],
+    topK: 5,
+    includeMetadata: true,
+    includeValues: false
 );
 
 if($response->successful()) {
-    // 
+    $matches = $response->json('matches');
+    // Process search results
+}
+```
+
+### Query By Text
+
+[Pinecone Docs](https://docs.pinecone.io/reference/api/2025-01/data-plane/query_text)
+
+```php
+$response = $pinecone->data()->vectors()->queryText(
+    text: "What are the benefits of apples?",
+    namespace: 'health-data',
+    filter: ['category' => 'nutrition'],
+    topK: 3,
+    includeMetadata: true,
+    includeValues: false
+);
+
+if($response->successful()) {
+    $matches = $response->json('matches');
+    // Process text search results
 }
 ```
 
