@@ -369,6 +369,31 @@ if($response->successful()) {
 }
 ```
 
+### Rerank Results
+
+[Pinecone Docs](https://docs.pinecone.io/guides/inference/rerank)
+
+```php
+$response = $pinecone->data()->vectors()->rerank(
+    model: 'bge-reranker-v2-m3',
+    query: 'What are the health benefits of fruits?',
+    documents: [
+        ['id' => '1', 'text' => 'Apples are high in fiber and vitamin C.'],
+        ['id' => '2', 'text' => 'Bananas provide potassium and can help with muscle function.'],
+        ['id' => '3', 'text' => 'Oranges contain high levels of vitamin C and antioxidants.']
+    ],
+    topN: 2,
+    returnDocuments: true,
+    parameters: ['truncate' => 'END']
+);
+
+if($response->successful()) {
+    $results = $response->json('results');
+    $usage = $response->json('usage.rerank_units');
+    // Process reranked results
+}
+```
+
 ### Delete Vectors
 
 [Pinecone Docs](https://docs.pinecone.io/reference/delete_post)

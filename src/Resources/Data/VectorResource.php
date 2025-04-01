@@ -118,6 +118,39 @@ class VectorResource extends Resource
         ));
     }
 
+    /**
+     * Reranks search results using a specified model.
+     *
+     * @param string $model The reranking model to use.
+     * @param string $query The query text.
+     * @param array $documents An array of documents to rerank.
+     * @param int|null $topN The number of results to return.
+     * @param bool $returnDocuments Whether to return the documents in the response.
+     * @param array|null $rankFields Fields to rerank on.
+     * @param array|null $parameters Additional model-specific parameters.
+     * @return Response
+     */
+    public function rerank(
+        string $model,
+        string $query,
+        array $documents,
+        ?int $topN = null,
+        bool $returnDocuments = false,
+        ?array $rankFields = null,
+        ?array $parameters = null
+    ): Response
+    {
+        return $this->connector->send(new Data\Rerank(
+            model: $model,
+            queryText: $query,
+            documents: $documents,
+            topN: $topN,
+            returnDocuments: $returnDocuments,
+            rankFields: $rankFields,
+            parameters: $parameters
+        ));
+    }
+
     public function fetch(array $ids, ?string $namespace = null): Response
     {
         return $this->connector->send(new Data\FetchVectors(
