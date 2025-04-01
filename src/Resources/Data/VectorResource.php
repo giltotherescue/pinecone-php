@@ -47,9 +47,9 @@ class VectorResource extends Resource
      * @param string|null $namespace Optional namespace to upsert the records into.
      * @return \Saloon\Http\Response
      */
-    public function upsertRecords(array $records, ?string $namespace = null): Response
+    public function upsertText(array $records, ?string $namespace = null): Response
     {
-        return $this->connector->send(new Data\UpsertRecords($records, $namespace));
+        return $this->connector->send(new Data\UpsertText($records, $namespace));
     }
 
     /**

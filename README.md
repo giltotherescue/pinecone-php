@@ -311,12 +311,12 @@ if($response->successful()) {
 }
 ```
 
-### Upsert Records
+### Upsert Text
 
 [Pinecone Docs](https://docs.pinecone.io/reference/api/2025-01/data-plane/upsert_records)
 
 ```php
-$response = $pinecone->data()->vectors()->upsertRecords(records: [
+$response = $pinecone->data()->vectors()->upsertText(records: [
     [
         '_id' => 'record_1',
         'text' => 'This is text that will be converted to a vector by Pinecone',

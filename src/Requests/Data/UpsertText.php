@@ -11,7 +11,7 @@ use Saloon\Traits\Body\HasJsonBody;
 /**
  * @link https://docs.pinecone.io/reference/api/2025-01/data-plane/upsert_records
  */
-class UpsertRecords extends Request implements HasBody
+class UpsertText extends Request implements HasBody
 {
     use HasJsonBody;
 

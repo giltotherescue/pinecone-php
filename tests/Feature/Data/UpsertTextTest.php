@@ -8,7 +8,7 @@ it('can upsert records', function () {
     // This is not good. Since the test relies on Pinecone having the needed index.
     setIndexHost($client, $index);
 
-    $response = $client->data()->vectors()->upsertRecords(
+    $response = $client->data()->vectors()->upsertText(
         records: [
             [
                 '_id'       => 'record_1',
