@@ -369,6 +369,80 @@ if($response->successful()) {
 }
 ```
 
+### Rerank Results
+
+[Pinecone Docs](https://docs.pinecone.io/guides/inference/rerank)
+
+Reranking is a two-stage process that improves search result quality by reordering initial results based on their semantic relevance to the query. This implementation uses Pinecone's hosted reranking models.
+
+```php
+// First, get results from any source (Pinecone query, database, etc.)
+$documents = [
+    ['id' => '1', 'text' => 'Apples are high in fiber and vitamin C.'],
+    ['id' => '2', 'text' => 'Bananas provide potassium and can help with muscle function.'],
+    ['id' => '3', 'text' => 'Oranges contain high levels of vitamin C and antioxidants.']
+];
+
+// Then rerank those results
+$response = $pinecone->data()->vectors()->rerank(
+    model: 'bge-reranker-v2-m3',  // Choose a supported model like bge-reranker-v2-m3 or cohere-rerank-3.5
+    query: 'What are the health benefits of fruits?',
+    documents: $documents,
+    topN: 2,  // Return only top 2 results
+    returnDocuments: true,  // Include original documents in response
+    rankFields: ['text'],  // Field to use for reranking (optional, defaults to 'text')
+    parameters: ['truncate' => 'END']  // Model-specific parameters
+);
+
+if($response->successful()) {
+    $results = $response->json('results');
+    $usage = $response->json('usage.rerank_units');
+    
+    // Process reranked results, which are sorted by relevance score
+    foreach ($results as $result) {
+        // $result['id'], $result['score'], $result['text']
+    }
+}
+```
+
+### Search Records with Integrated Reranking
+
+[Pinecone Docs](https://docs.pinecone.io/guides/inference/rerank#integrated-reranking)
+
+This feature allows you to perform search and reranking in a single operation, simplifying your code. It uses the records search endpoint with the optional rerank parameter.
+
+```php
+$response = $pinecone->data()->vectors()->search(
+    // Query parameters
+    queryInput: ['text' => 'Disease prevention strategies'],
+    queryTopK: 10, // Get initial 10 results
+    queryFilter: ['category' => 'digestive system'], // Optional: Filter results before reranking
+    
+    // Reranking parameters (all optional - omit for standard search without reranking)
+    rerankModel: 'bge-reranker-v2-m3', // Reranker model to use
+    rerankTopN: 3, // Return only top 3 results after reranking
+    rerankRankFields: ['chunk_text'], // Field to use for reranking
+    
+    // Other parameters
+    fields: ['title', 'category', 'chunk_text'], // Fields to include in results
+    namespace: 'medical-journals' // Optional namespace
+);
+
+if ($response->successful()) {
+    $records = $response->json('records');
+    
+    // Process the reranked search results
+    foreach ($records as $record) {
+        // Each record contains:
+        // - _id: Document identifier
+        // - _score: Relevance score (0-1, higher is better)
+        // - fields: Requested document fields
+        echo "ID: {$record['_id']}, Score: {$record['_score']}\n";
+        echo "Title: {$record['fields']['title']}\n";
+    }
+}
+```
+
 ### Delete Vectors
 
 [Pinecone Docs](https://docs.pinecone.io/reference/delete_post)

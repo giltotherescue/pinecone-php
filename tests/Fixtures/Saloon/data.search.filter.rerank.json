@@ -1,0 +1,12 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "content-type": "application/json",
+        "date": "Fri, 23 Feb 2024 11:00:00 GMT",
+        "x-envoy-upstream-service-time": "55",
+        "content-length": "350",
+        "server": "envoy",
+        "X-Pinecone-API-Version": "2025-01"
+    },
+    "data": "{\"records\":[{\"_id\":\"doc_digestive1\",\"_score\":0.92,\"fields\":{\"category\":\"digestive system\",\"chunk_text\":\"Content about digestive disease prevention...\"}},{\"_id\":\"doc_digestive2\",\"_score\":0.85,\"fields\":{\"category\":\"digestive system\",\"chunk_text\":\"More details on preventing digestive issues...\"}}],\"namespace\":\"test-namespace\"}"
+} 

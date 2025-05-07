@@ -1,0 +1,12 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "content-type": "application/json",
+        "date": "Thu, 22 Feb 2024 10:00:00 GMT",
+        "x-envoy-upstream-service-time": "50",
+        "content-length": "300",
+        "server": "envoy",
+        "X-Pinecone-API-Version": "2025-01"
+    },
+    "data": "{\"records\":[{\"_id\":\"doc1\",\"_score\":0.95,\"fields\":{\"category\":\"health\",\"chunk_text\":\"Content about disease prevention strategies...\"}},{\"_id\":\"doc2\",\"_score\":0.89,\"fields\":{\"category\":\"medical\",\"chunk_text\":\"Further details on preventing common diseases...\"}}],\"namespace\":\"test-namespace\"}"
+} 

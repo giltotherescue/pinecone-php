@@ -118,10 +118,88 @@ class VectorResource extends Resource
         ));
     }
 
+    /**
+     * Reranks search results using a specified model.
+     *
+     * @param string $model The reranking model to use.
+     * @param string $query The query text.
+     * @param array $documents An array of documents to rerank.
+     * @param int|null $topN The number of results to return.
+     * @param bool $returnDocuments Whether to return the documents in the response.
+     * @param array|null $rankFields Fields to rerank on.
+     * @param array|null $parameters Additional model-specific parameters.
+     * @return Response
+     */
+    public function rerank(
+        string $model,
+        string $query,
+        array $documents,
+        ?int $topN = null,
+        bool $returnDocuments = false,
+        ?array $rankFields = null,
+        ?array $parameters = null
+    ): Response
+    {
+        // Temporarily set the correct base URL for inference
+        $originalBaseUrl = $this->connector->resolveBaseUrl(); // Get current base (might be index host or api.pinecone.io)
+        $this->connector->setBaseUrl('https://api.pinecone.io');
+
+        $response = $this->connector->send(new Data\Rerank(
+            model: $model,
+            queryText: $query,
+            documents: $documents,
+            topN: $topN,
+            returnDocuments: $returnDocuments,
+            rankFields: $rankFields,
+            parameters: $parameters
+        ));
+
+        // Restore the original base URL
+        $this->connector->setBaseUrl($originalBaseUrl);
+
+        return $response;
+    }
+
     public function fetch(array $ids, ?string $namespace = null): Response
     {
         return $this->connector->send(new Data\FetchVectors(
             ids: $ids,
+            namespace: $namespace
+        ));
+    }
+
+    /**
+     * Search records with optional integrated reranking.
+     *
+     * @param array $queryInput The query input, e.g., ['text' => 'Disease prevention']
+     * @param int $queryTopK The number of initial results to fetch for the query.
+     * @param array|null $queryFilter Optional metadata filter to apply to the query, e.g., ['category' => 'digestive system'].
+     * @param string|null $rerankModel The reranking model to use, e.g., 'bge-reranker-v2-m3'. If null, no reranking is performed.
+     * @param int|null $rerankTopN The number of results to return after reranking.
+     * @param array|null $rerankRankFields Fields to rerank on. If null, defaults to the main query field. E.g. ['chunk_text']
+     * @param array|null $fields Specific fields to return in the results, e.g., ['category', 'chunk_text'].
+     * @param string|null $namespace Optional namespace to search in.
+     * @return Response
+     */
+    public function search(
+        array $queryInput,
+        int $queryTopK,
+        ?array $queryFilter = null,
+        ?string $rerankModel = null,
+        ?int $rerankTopN = null,
+        ?array $rerankRankFields = null,
+        ?array $fields = null,
+        ?string $namespace = null
+    ): Response
+    {
+        return $this->connector->send(new Data\Search(
+            queryInput: $queryInput,
+            queryTopK: $queryTopK,
+            queryFilter: $queryFilter,
+            rerankModel: $rerankModel,
+            rerankTopN: $rerankTopN,
+            rerankRankFields: $rerankRankFields,
+            fields: $fields,
             namespace: $namespace
         ));
     }

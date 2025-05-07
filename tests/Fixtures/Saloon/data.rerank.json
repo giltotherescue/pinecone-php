@@ -1,0 +1,11 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "content-type": "application/json",
+        "date": "Wed, 21 Feb 2024 13:30:03 GMT",
+        "x-envoy-upstream-service-time": "34",
+        "content-length": "456",
+        "server": "envoy"
+    },
+    "data": "{\"results\":[{\"id\":\"1\",\"score\":0.9876,\"text\":\"Apples are high in fiber and vitamin C.\"},{\"id\":\"2\",\"score\":0.8765,\"text\":\"Bananas provide potassium and can help with muscle function.\"}],\"model\":\"rerank-english-v2.0\",\"usage\":{\"rerank_units\":1}}"
+} 

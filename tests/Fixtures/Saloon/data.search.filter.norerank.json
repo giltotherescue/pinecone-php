@@ -1,0 +1,12 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "content-type": "application/json",
+        "date": "Fri, 23 Feb 2024 11:05:00 GMT",
+        "x-envoy-upstream-service-time": "48",
+        "content-length": "300",
+        "server": "envoy",
+        "X-Pinecone-API-Version": "2025-01"
+    },
+    "data": "{\"records\":[{\"_id\":\"fruit_snack1\",\"_score\":0.90,\"fields\":{\"category\":\"healthy eating\",\"food_group\":\"fruits\"}},{\"_id\":\"fruit_snack2\",\"_score\":0.82,\"fields\":{\"category\":\"recipes\",\"food_group\":\"fruits\"}}],\"namespace\":\"test-namespace\"}"
+} 
